@@ -1,1 +1,60 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#ifndef RECURSIVE_FUNC
+#define RECURSIVE_FUNC
+#endif
 
+using namespace std;
+
+vector<string> split(const string& s, const char delimiter, bool ignore_empty = false){
+    vector<string> result;
+    string tmp = s;
+
+    while(tmp.find(delimiter) != string::npos)
+    {
+        string new_part = tmp.substr(0, tmp.find(delimiter));
+        tmp = tmp.substr(tmp.find(delimiter)+1, tmp.size());
+        if(not (ignore_empty and new_part.empty()))
+        {
+            result.push_back(new_part);
+        }
+    }
+    if(not (ignore_empty and tmp.empty()))
+    {
+        result.push_back(tmp);
+    }
+    return result;
+}
+
+int sum_recursive(vector<int> v){
+    RECURSIVE_FUNC
+
+    int sum_of_elements = 0;
+    string::size_type length;
+    length = v.size();
+    if (length == 0) return 0;
+    else {
+        for (auto& i : v) {
+            sum_of_elements += i;
+        }
+        return sum_of_elements;
+    }
+}
+
+
+#ifndef UNIT_TESTING
+int main()
+{
+    cout << "Enter integers separated by spaces: ";
+    string line;
+    getline(cin, line);
+    vector<string> strings = split(line, ' ', true);
+    vector<int> integers;
+    for(auto s : strings){
+        integers.push_back(stoi(s));
+    }
+
+    cout << "Sum: " << sum_recursive(integers) << endl;
+}
+#endif
