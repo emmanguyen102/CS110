@@ -1,8 +1,7 @@
 #include "player.hh"
 
-Player::Player(const string& name)
-{
-    name_ = name;
+Player::Player(const string& name):
+    name_(name){
 }
 
 string Player::get_name(){
@@ -17,9 +16,7 @@ bool Player::has_won(){
     if (pts_ == 50) {
         return true;
     }
-    else {
-        return false;
-    }
+    return false;
 }
 
 void Player::add_points(int pts){
