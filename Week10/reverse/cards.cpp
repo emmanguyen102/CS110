@@ -1,37 +1,66 @@
-#ifndef CARDS_HH
-#define CARDS_HH
-
 #include <iostream>
 #include <memory>
+#include "cards.hh"
 
-class Cards {
 
-    public:
-      // A dynamic structure must have a constructor
-      // that initializes the top item as nullptr.
-      Cards();
+Cards::Cards(): top_( nullptr ) {
+}
 
-      // Adds a new card with the given id as the topmost element.
-      void add(int id);
 
-      // Prints the content of the data structure with ordinal numbers to the
-      // output stream given as a parameter starting from the first element.
-      void print(std::ostream& s);
+void Cards::add(int id) {
+    std::shared_ptr<Card_data> new_card 
+            = std::make_shared<Card_data>(Card_data{id, top_});
+    top_ = new_card;
+}
 
-      // Removes the topmost card and passes it in the reference parameter id to the caller.
-      // Returns false, if the data structure is empty, otherwise returns true.
-      bool remove(int& id);
+void Cards::print(std::ostream& s) {
+   std::shared_ptr<Card_data> to_be_printed = top_;
+   int nr = 1;
 
-      // Reverses the content of the data structure as opposite.
-      void reverse();
+   while( to_be_printed != 0 ) {
+      s << nr << ": " << to_be_printed->data << std::endl;
+      to_be_printed = to_be_printed->next;
+      ++nr;
+   }
+}
 
-    private:
-      struct Card_data {
-        int data;
-        std::shared_ptr<Card_data> next;
-      };
+bool Cards::remove(int &id)
+{
+    if (top_ == nullptr)
+    {
+        return false;
+    }
+    std::shared_ptr<Card_data> to_be_removed = top_;
+    id = to_be_removed->data;
 
-      std::shared_ptr<Card_data> top_;
-};
+    top_ = top_->next;
+    return true;
+}
 
-#endif // CARDS_HH
+void Cards::reverse()
+{
+    if (top_ == nullptr)
+    {
+        return;
+    }
+    std::shared_ptr<Card_data> temp = top_;
+    int count = 0;
+    while(temp != nullptr)
+    {
+        add(temp->data);
+        temp = temp->next;
+        count++;
+    }
+    temp = top_;
+    for(int a = 1; a < count; a++)
+    {
+        temp = temp->next;
+    }
+    temp->next = nullptr;
+}
+
+// Tip for writing code more efficiently:
+// Do not write the stubs of the methods remove and reverse by yourself here,
+// but open the file cards.hh and click the declaration of the method
+// by the right mouse button and select
+// Refactor > Add definition in cards.cpp
